@@ -1,9 +1,15 @@
 // credits: @nayeemdev, adapted for use by faiz95ahmed
 
+// include showdown.min.js
 $(document).ready(function() {
 
     'use strict';
-
+    var converter = new showdown.Converter(),
+        text      = '# hello, markdown!',
+        html      = converter.makeHtml(text);
+    console.log(html);
+    
+    
     /*-----------------------------------------------------------------
       Detect device mobile
     -------------------------------------------------------------------*/
@@ -292,6 +298,18 @@ $(document).ready(function() {
         autosize(this);
     });
 
+    /*-----------------------------------------------------------------
+	  Projects Tab
+    -------------------------------------------------------------------*/
+    var populateProjects = function() {
+        var accordion = document.getElementById('accordion');
+        for (var i = 0; i < projects.length; i++) {
+            var project_iFrame = document.getElementById(projects[i]);
+            console.log(project_iFrame.contentWindow.document);
+        };
+    };
+    
+
 
     /*-----------------------------------------------------------------
 	  Tabs
@@ -302,10 +320,11 @@ $(document).ready(function() {
         $('.content .tabcontent:first').show();
         $('.nav__item a').on('click', function () {
             $('.nav__item a').removeClass('active');
-            console.log(this);
             $(this).addClass('active');
             var currentTab = $(this).attr('href');
-            console.log(currentTab);
+            if (currentTab == '#projects-tab') {
+                populateProjects();
+            };
             $('.content .tabcontent').hide();            
             $(currentTab).show();
             $portfolioMasonry.isotope ({
@@ -335,6 +354,9 @@ $(document).ready(function() {
 		
 	    }
 	});
+
+    
+
 
     /*-----------------------------------------------------------------
 	  Projects link
