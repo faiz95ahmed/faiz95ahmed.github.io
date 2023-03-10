@@ -301,7 +301,6 @@ $(document).ready(function() {
     var populateProjects = function() {
         var converter = new showdown.Converter();
         var accordion = document.getElementById('accordion');
-        var cards = [];
         for (var i = 0; i < projects.length; i++) {
             var project_iFrame = document.getElementById(projects[i]);
             var raw_markdown = project_iFrame.contentWindow.document.body.getElementsByTagName('pre')[0].innerText.trim();
@@ -340,14 +339,11 @@ $(document).ready(function() {
             cardBodyContent.innerHTML = converter.makeHtml(raw_markdown);
             cardBody.appendChild(cardBodyContent);
             card.appendChild(cardBody);
-            cards.push(card);
+            accordion.appendChild(card);
         };
-        if (cards.length > 0) {
-            cards[0].getElementById('cardBody0').className = 'collapse show';
-            cards[0].getElementById('cardHeading0').setAttribute('aria-expanded', 'true');
-        };
-        for (var i = 0; i < cards.length; i++) {
-            accordion.appendChild(cards[i]);
+        if (projects.length > 0) {
+            document.getElementById('cardBody0').className = 'collapse show';
+            document.getElementById('cardHeading0').setAttribute('aria-expanded', 'true');
         };
     };
     
