@@ -4,10 +4,7 @@
 $(document).ready(function() {
 
     'use strict';
-    var converter = new showdown.Converter(),
-        text      = '# hello, markdown!',
-        html      = converter.makeHtml(text);
-    console.log(html);
+    
     
     
     /*-----------------------------------------------------------------
@@ -302,10 +299,55 @@ $(document).ready(function() {
 	  Projects Tab
     -------------------------------------------------------------------*/
     var populateProjects = function() {
+        var converter = new showdown.Converter();
         var accordion = document.getElementById('accordion');
+        var cards = [];
         for (var i = 0; i < projects.length; i++) {
             var project_iFrame = document.getElementById(projects[i]);
-            console.log(project_iFrame.contentWindow.document);
+            var raw_markdown = project_iFrame.contentWindow.document.body.getElementsByTagName('pre')[0].innerText.trim();
+            var title = projects[i];
+            var first_line = raw_markdown.split('\n')[0];
+            if (first_line.startsWith('#')) {
+                if (!first_line.startsWith('##')) {
+                    title = first_line.replace(raw_markdown.substring(1)).trim();
+                    // remove first line from raw_markdown
+                    raw_markdown = raw_markdown.split('\n').slice(1).join('\n');
+                }
+            };
+            var cardBodyId = 'cardBody' + i;
+            var cardHeadingId = 'cardHeading' + i;
+            var card = document.createElement('div');
+            card.id = 'card' + i;
+            card.className = 'card';
+            var cardHeader = document.createElement('a');
+            cardHeader.className = 'card-header';
+            cardHeader.id = cardHeadingId;
+            cardHeader.setAttribute('data-toggle', 'collapse');
+            cardHeader.setAttribute('data-target', '#' + cardBodyId);
+            cardHeader.setAttribute('aria-controls', cardBodyId);
+            cardHeader.setAttribute('aria-expanded', 'false');
+            var cardHeading = document.createElement('h5');
+            cardHeading.innerText = title;
+            cardHeader.appendChild(cardHeading);
+            card.appendChild(cardHeader);
+            var cardBody = document.createElement('div');
+            cardBody.id = cardBodyId;
+            cardBody.className = 'collapse';
+            cardBody.setAttribute('aria-labelledby', cardHeadingId);
+            cardBody.setAttribute('data-parent', '#accordion');
+            var cardBodyContent = document.createElement('div');
+            cardBodyContent.className = 'card-body';
+            cardBodyContent.innerHTML = converter.makeHtml(raw_markdown);
+            cardBody.appendChild(cardBodyContent);
+            card.appendChild(cardBody);
+            cards.push(card);
+        };
+        if (cards.length > 0) {
+            cards[0].getElementById('cardBody0').className = 'collapse show';
+            cards[0].getElementById('cardHeading0').setAttribute('aria-expanded', 'true');
+        };
+        for (var i = 0; i < cards.length; i++) {
+            accordion.appendChild(cards[i]);
         };
     };
     
