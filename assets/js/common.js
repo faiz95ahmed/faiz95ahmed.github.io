@@ -370,7 +370,7 @@ $(document).ready(function() {
             $('.nav__item a').removeClass('active');
             $(this).addClass('active');
             var currentTab = $(this).attr('href');
-            if (currentTab == '#projects-tab') {
+            if (currentTab == '#projects-tab' && document.getElementById('accordion').children.length == 0) {
                 populateProjects();
             };
             $('.content .tabcontent').hide();            
