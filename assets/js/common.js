@@ -303,15 +303,25 @@ $(document).ready(function() {
         var accordion = document.getElementById('accordion');
         for (var i = 0; i < projects.length; i++) {
             var project_iFrame = document.getElementById(projects[i]);
+            // check tag type of project_iFrame
             var raw_markdown = project_iFrame.contentWindow.document.body.getElementsByTagName('pre')[0].innerText.trim();
             var title = projects[i];
             var first_line = raw_markdown.split('\n')[0];
-            if (first_line.startsWith('#')) {
-                if (!first_line.startsWith('##')) {
-                    title = first_line.replace(raw_markdown.substring(1)).trim();
-                    // remove first line from raw_markdown
-                    raw_markdown = raw_markdown.split('\n').slice(1).join('\n');
-                }
+            if (first_line.startsWith('#') && !first_line.startsWith('##')) {
+                console.log("First line starts with # ");
+                title = first_line.substring(1).trim();
+                // remove first line from raw_markdown
+                raw_markdown = raw_markdown.split('\n').slice(1).join('\n');
+                // find any image sections (regex: !\[.*\]\((.*)\))
+                var image_regex = /!\[.*\]\((.*)\)/g;
+                // if the image path starts with "../../assets", replace it with "assets"
+                raw_markdown = raw_markdown.replace(image_regex, function(match, p1, offset, string) {
+                    if (p1.startsWith('../../assets')) {
+                        return match.replace('../../assets', 'assets');
+                    } else {
+                        return match;
+                    }
+                });
             };
             var cardBodyId = 'cardBody' + i;
             var cardHeadingId = 'cardHeading' + i;

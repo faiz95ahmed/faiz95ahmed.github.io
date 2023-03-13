@@ -1,1 +1,3 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla fermentum arcu nec ligula bibendum condimentum. Mauris elementum tempus mauris. Aliquam erat volutpat. Curabitur egestas magna quam, feugiat volutpat enim sollicitudin sed. Curabitur sem enim, tempor sed lacinia quis, ultricies in nulla.
+# Procedural Terrain Generation
+
+Using a renderer I wrote in University (OpenGL, C++17), this is a personal project involving generating procedural voxel based terrain.
